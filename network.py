@@ -13,7 +13,7 @@ I have noted where I made my own personal additions.
 '''
 TODO:
 - understand backprop code
-- understand how evaluate code works
+- add comments so that this code remains clear when I come back in the future
 '''
 
 class Network(object):
@@ -96,19 +96,20 @@ class Network(object):
 			activation = sigmoid(z)
 			activations.append(activation)
 
+		# I understand the code in this function up until this point but this line's purpose is a bit unclear
 		delta = self.cost_derivative(activations[-1], y) * sigmoid_prime(zs[-1])
 
 		nabla_b[-1] = delta
 		nabla_w[-1] = np.dot(delta, activations[-2].transpose())
 
-		
-		for l in range(2, self.num_layers):
+		for i in range(2, self.num_layers):
 
-			z = zs[-l]
+			z = zs[-i]
 			sp = sigmoid_prime(z)
-			delta = np.dot(self.weights[-1+l].transpose(), delta) * sp
-			nabla_b[-l] = delta
-			nabla_w[-l] = np.dot(delta, activations[-l-1].transpose())
+			# why does the transpose function have to be used?
+			delta = np.dot(self.weights[-1+i].transpose(), delta) * sp
+			nabla_b[-i] = delta
+			nabla_w[-i] = np.dot(delta, activations[-i-1].transpose())
 
 		return (nabla_b, nabla_w)
 
@@ -152,7 +153,7 @@ def sigmoid_prime(z):
 # personal addition for loading the network from a json file
 def load(path):
 
-	with open('network.json') as file:
+	with open(path) as file:
 		data = json.load(file)
 
 	sizes = data['sizes']
