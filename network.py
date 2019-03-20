@@ -13,6 +13,7 @@ I have noted where I made my own personal additions.
 '''
 TODO:
 - understand backprop code
+- understand how evaluate code works
 '''
 
 class Network(object):
@@ -44,7 +45,7 @@ class Network(object):
 	'''
 	def sgd(self, training_data, epochs, mini_batch_size, eta, test_data=None):
 
-		if test_data:
+		if test_data is not None:
 			n_test = len(test_data)
 
 		n = len(training_data)
@@ -62,7 +63,7 @@ class Network(object):
 			else:
 				print('Epoch {0} complete.'.format(j))
 
-			break
+			# break
 
 	def update_mini_batch(self, mini_batch, eta):
 
@@ -123,7 +124,7 @@ class Network(object):
 
 
 	# personal addition for saving the file to a json file
-	def save(self):
+	def save(self, path=None):
 		
 		d = {}
 
@@ -132,7 +133,10 @@ class Network(object):
 		d['biases'] = [b.tolist() for b in self.biases]
 		d['weights'] = [w.tolist() for w in self.weights]
 
-		with open('network.json', 'w') as file:
+		if not path:
+			path = 'network.json'
+
+		with open(path, 'w') as file:
 			json.dump(d, file, indent=4)
 
 
